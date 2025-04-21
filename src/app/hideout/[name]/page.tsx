@@ -1,13 +1,12 @@
 import { fetchHideoutModulesPageCached } from "../api/server/fetch-hideout-modules";
 import { HideoutModuleDetails } from "./ui/hideout-module-details";
-import { fetchHideoutItems } from "../../../infrastructure/graphql/api/hideout";
+import { fetchHideoutItems } from "../api/fetch-hideout";
 
 type Props = {
   params: Promise<{ name: string }>;
 };
 
 export const revalidate = 86_400;
-export const dynamicParams = true;
 export const generateStaticParams = async () => {
   const hideoutModulesList = await fetchHideoutItems();
 
@@ -15,6 +14,7 @@ export const generateStaticParams = async () => {
     name: station?.normalizedName,
   }));
 };
+export const experimental_ppr = true;
 
 const HideoutModulePage = async ({ params }: Props) => {
   const { name: normalizedName } = await params;
