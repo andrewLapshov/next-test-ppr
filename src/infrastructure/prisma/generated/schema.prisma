@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/infrastructure/prisma/generated"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String      @id @default(cuid())
+  userId       String?     @unique @default(cuid()) @map("user_id")
+  username     String?     @unique
+  subscription SubType     @default(free)
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+  Character    Character[] @relation("UserCharacters")
+
+  selectedCharacterId String?    @unique @map("selected_character_id")
+  selectedCharacter   Character? @relation("SelectedCharacter", fields: [selectedCharacterId], references: [id], onDelete: SetNull)
+
+  @@map("users")
+}
+
+model Character {
+  id          String        @id @default(cuid())
+  name        String
+  level       Int           @default(1)
+  faction     Faction
+  gameMode    GameMode      @map("game_mode")
+  user        User          @relation("UserCharacters", references: [userId], fields: [userId], onDelete: Cascade)
+  userId      String        @map("user_id")
+  selectedBy  User?         @relation("SelectedCharacter")
+  TrackedItem TrackedItem[]
+  // Quest       Quest[]
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  @@unique([userId, name])
+  @@map("characters")
+}
+
+model TrackedItem {
+  itemId      String    @map("item_id")
+  entityId    String    @map("entity_id")
+  count       Int
+  character   Character @relation(references: [id], fields: [characterId], onDelete: Cascade)
+  characterId String    @map("character_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@id([characterId, itemId, entityId])
+  @@map("tracked_items")
+}
+
+enum SubType {
+  free
+  plus
+}
+
+enum GameMode {
+  pve
+  regular
+}
+
+enum Faction {
+  BEAR
+  USEC
+}
+
+// model Quest {
+//   id          String    @id
+//   userId      String    @unique @map("user_id")
+//   character   Character @relation(fields: [characterId], references: [id])
+//   characterId String    @map("character_id")
+//   completed   Boolean   @default(false)
+//
+//   @@map("quests")
+// }
