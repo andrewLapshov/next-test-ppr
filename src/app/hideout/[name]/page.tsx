@@ -14,7 +14,6 @@ export const generateStaticParams = async () => {
     name: station?.normalizedName,
   }));
 };
-export const experimental_ppr = true;
 
 const HideoutModulePage = async ({ params }: Props) => {
   const { name: normalizedName } = await params;
