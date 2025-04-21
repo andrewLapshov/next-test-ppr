@@ -59,16 +59,17 @@ const query = `
 `;
 
 export const fetchHideoutItems = async () => {
-  'use cache';
   return fetch("https://api.tarkov.dev/graphql", {
     body: JSON.stringify({
       query,
       variables: { lang: "ru" },
     }),
+    cache: "force-cache",
     headers: {
       "Content-Type": "application/json",
     },
     method: "POST",
+    next: { revalidate: 60 * 60 * 24 },
   })
     .then((response) => response.json())
     .then((data) => data);

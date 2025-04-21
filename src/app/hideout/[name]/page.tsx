@@ -6,6 +6,8 @@ type Props = {
   params: Promise<{ name: string }>;
 };
 
+export const revalidate = 86_400;
+export const dynamicParams = true;
 export const generateStaticParams = async () => {
   const hideoutModulesList = await fetchHideoutItems();
 

@@ -15,7 +15,6 @@ const hideoutModulesSchema = new schema.Entity(
 const fetchHideoutModulesPage = async (): Promise<
   Record<string, HideoutPageExtModule>
 > => {
-  'use cache';
   const rawHideoutModulesData = await fetchHideoutItems();
 
   const extHideoutModulesData = rawHideoutModulesData.data.hideoutStations.map(
