@@ -1,7 +1,7 @@
-import { BaseHideoutModuleFieldsFragment } from 'infrastructure/graphql/generated/graphql';
 
 import { HideoutPageExtModule } from '../../../types';
 import { prepareExtItem } from './prepare-ext-item';
+import { BaseHideoutModuleFieldsFragment } from "../../../../../infrastructure/graphql/generated/graphql";
 
 export const prepareHideoutModules = (module: BaseHideoutModuleFieldsFragment): HideoutPageExtModule => {
   return {
