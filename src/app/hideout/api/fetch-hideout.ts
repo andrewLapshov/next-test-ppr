@@ -1,5 +1,3 @@
-"use cache";
-
 const query = `
   query hideoutQuery($lang: LanguageCode) {
     hideoutStations(lang: $lang) {
@@ -61,6 +59,7 @@ const query = `
 `;
 
 export const fetchHideoutItems = async () => {
+  'use cache';
   return fetch("https://api.tarkov.dev/graphql", {
     body: JSON.stringify({
       query,
