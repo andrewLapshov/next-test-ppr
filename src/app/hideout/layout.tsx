@@ -5,6 +5,7 @@ import { fetchHideoutItems } from "./api/fetch-hideout";
 
 export const revalidate = 86_400;
 export const generateStaticParams = () => [];
+export const experimental_ppr = true;
 
 const HideoutLayout = async ({ children }: PropsWithChildren) => {
   const hideoutModulesList = await fetchHideoutItems();

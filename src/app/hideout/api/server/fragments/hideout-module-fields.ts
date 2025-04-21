@@ -1,4 +1,4 @@
-import { graphql } from 'infrastructure/graphql/generated';
+import { graphql } from "../../../../../infrastructure/graphql/generated";
 
 graphql(`
   fragment BaseHideoutLevelFields on HideoutStationLevel {
