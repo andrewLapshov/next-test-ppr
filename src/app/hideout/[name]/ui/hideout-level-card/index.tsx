@@ -5,12 +5,14 @@ import { Description } from "./ui/description";
 import { ModuleRequirements } from "./ui/module-requirements";
 import { SkillRequirements } from "./ui/skill-requirements";
 import { TraderRequirements } from "./ui/trader-requirements";
+import { TestDynamic } from "./ui/test-dynamic";
 
 type Props = {
+  id: string;
   level: HideoutPageHideoutModuleLevel;
 };
 
-export const HideoutLevelCard = async ({ level }: Props) => {
+export const HideoutLevelCard = async ({ level, id }: Props) => {
   return (
     <div className="w-full overflow-hidden rounded-lg border border-gray-700 bg-gray-800 shadow-lg transition-colors hover:border-gray-500">
       <div className="bg-gray-700 px-4 py-3">
@@ -25,6 +27,7 @@ export const HideoutLevelCard = async ({ level }: Props) => {
         <Description description={level.description} title={"description"} />
 
         {/*<ItemRequirements entityId={level.id} itemRequirements={level.itemRequirements} title={'requiredItems'} />*/}
+        <TestDynamic id={id} />
         <ModuleRequirements
           moduleRequirements={level.stationLevelRequirements}
           title={"requiredModules"}
