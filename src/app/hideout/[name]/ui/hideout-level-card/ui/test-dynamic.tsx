@@ -13,7 +13,9 @@ export const TestDynamic = ({ id }: Props) => {
   useEffect(() => {
     (async () => {
       const hideoutModulesList = await fetchHideoutItems();
-      const moduleData = hideoutModulesList.find((item) => item.id === id);
+      const moduleData = hideoutModulesList.data.hideoutStations.find(
+        (item) => item.id === id,
+      );
 
       setName(moduleData.name);
     })();
