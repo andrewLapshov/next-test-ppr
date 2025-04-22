@@ -3,11 +3,11 @@ import { PropsWithChildren } from "react";
 import { ModuleLink } from "./ui/module-link";
 import { fetchHideoutItems } from "./api/fetch-hideout";
 
-export const revalidate = 86_400;
 export const generateStaticParams = () => [];
 export const experimental_ppr = true;
 
 const HideoutLayout = async ({ children }: PropsWithChildren) => {
+  "use cache";
   const hideoutModulesList = await fetchHideoutItems();
 
   return (
