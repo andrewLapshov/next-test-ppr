@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchHideoutItems } from "../../../../api/fetch-hideout";
 
 type Props = {
   id: string;
@@ -12,15 +11,12 @@ export const TestDynamic = ({ id }: Props) => {
 
   useEffect(() => {
     (async () => {
-      const hideoutModulesList = await fetchHideoutItems();
-      const moduleData = hideoutModulesList.data.hideoutStations.find(
-        (item) => item.id === id,
-      );
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      setName(moduleData.name);
+      setName(id);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <div>Dynamic name: {name}</div>;
+  return <div className={"text-gray-500"}>Dynamic name: {name}</div>;
 };

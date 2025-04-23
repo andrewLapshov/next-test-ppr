@@ -1,7 +1,3 @@
-"use client";
-
-import { useSelectedLayoutSegment } from "next/navigation";
-
 import cn from "clsx";
 import Link from "next/link";
 
@@ -9,21 +5,27 @@ type Props = {
   imageLink: string | null;
   name: string;
   normalizedName: string;
+  isActive?: boolean;
+  onClick?: () => void;
 };
 
-export const ModuleLink = ({ imageLink, name, normalizedName }: Props) => {
-  const segment = useSelectedLayoutSegment();
-  const isActive = normalizedName === segment;
-
+export const ModuleLink = ({
+  imageLink,
+  name,
+  normalizedName,
+  isActive,
+  onClick,
+}: Props) => {
   return (
     <Link
       className={cn(
         "text-sm hover:underline md:pr-2",
-        isActive && "rounded-md bg-white text-black",
+        isActive && "rounded-md bg-yellow-200 text-black",
       )}
       href={`/hideout/${normalizedName}`}
       prefetch={false}
       scroll={false}
+      onClick={onClick}
     >
       <div className="flex items-center gap-1">
         {imageLink && (
