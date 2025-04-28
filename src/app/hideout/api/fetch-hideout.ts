@@ -69,7 +69,7 @@ export const fetchHideoutItems = async () => {
       "Content-Type": "application/json",
     },
     method: "POST",
-    next: { revalidate: 60 * 60 * 24 },
+    next: { revalidate: 86400 },
   })
     .then((response) => response.json())
     .then((data) => data);
