@@ -1,17 +1,17 @@
+import { getPost, getPosts } from "../api";
+
 interface Post {
   id: number;
   title: string;
   body: string;
 }
 
-export const revalidate = 1200; // Ревалидация каждые 60 секунд
+export const revalidate = 86400; // 24 часа
 export const dynamicParams = true; // Разрешить генерацию новых путей
 
 // Генерация статических путей во время сборки
 export async function generateStaticParams() {
-  const posts: Post[] = await fetch(
-    "https://jsonplaceholder.typicode.com/posts",
-  ).then((res) => res.json());
+  const posts: Post[] = await getPosts();
 
   return posts.slice(0, 10).map((post) => ({
     id: String(post.id),
@@ -26,12 +26,7 @@ export default async function PostPage({
 }) {
   const { id } = await params;
 
-  const post: Post = await fetch(
-    `https://jsonplaceholder.typicode.com/posts/${id}`,
-    {
-      next: { tags: ["posts"] }, // Теги для ручной ревалидации
-    },
-  ).then((res) => res.json());
+  const post: Post = await getPost(id);
 
   return (
     <article className="max-w-2xl mx-auto p-4">

@@ -1,20 +1,17 @@
 // app/page.tsx
 
+import { getPosts } from "./api";
+
 interface Post {
   id: number;
   title: string;
   body: string;
 }
 
-export const revalidate = 1200; // Ревалидация всей страницы каждые 60 секунд
+export const revalidate = 86400; // 24 часа
 
 export default async function Home() {
-  const posts: Post[] = await fetch(
-    "https://jsonplaceholder.typicode.com/posts",
-    {
-      next: { tags: ["posts"] }, // Тег для ручной ревалидации
-    },
-  ).then((res) => res.json());
+  const posts: Post[] = await getPosts();
 
   return (
     <div className="max-w-4xl mx-auto p-4">
