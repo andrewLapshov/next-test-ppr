@@ -3,7 +3,7 @@ import { PropsWithChildren } from "react";
 import { fetchHideoutItems } from "./api/fetch-hideout";
 import { ModuleMenu } from "./ui/module-menu";
 
-export const revalidate = 86400;
+export const revalidate = 86_400;
 export const generateStaticParams = () => [];
 
 const HideoutLayout = async ({ children }: PropsWithChildren) => {

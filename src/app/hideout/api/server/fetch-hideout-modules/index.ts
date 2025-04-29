@@ -37,6 +37,6 @@ export const fetchHideoutModulesPageCached = unstable_cache(
   fetchHideoutModulesPage,
   undefined,
   {
-    revalidate: 86400, // 1 день
+    revalidate: 60 * 60 * 24, // 1 день
   },
 );
