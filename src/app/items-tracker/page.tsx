@@ -19,7 +19,7 @@ type Props = {
 };
 
 const ItemsTracker = async ({ searchParams }: Props) => {
-  await Promise.all([
+  const [dictionaries, totalItems, itemsTrackerList] = await Promise.all([
     fetchDictionariesCached(),
     fetchTotalItemsCached(),
     fetchItemsTrackerListCached(),
@@ -37,6 +37,9 @@ const ItemsTracker = async ({ searchParams }: Props) => {
   return (
     <div className={"flex flex-col gap-1"}>
       ItemsTracker
+      <span>{Object.keys(dictionaries.traders).length}</span>
+      <span>{Object.keys(totalItems).length}</span>
+      <span>{Object.keys(itemsTrackerList).length}</span>
       <li>showQuests: {showQuests}</li>
       <li>showHideout: {showHideout}</li>
       <li>hideCompleted: {hideCompleted}</li>
