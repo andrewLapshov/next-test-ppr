@@ -10,12 +10,12 @@
       {
         "kind": "OBJECT",
         "name": "Achievement",
-        "description": null,
+        "description": "**In-game achievements players can earn by completing specific objectives.**",
         "isOneOf": null,
         "fields": [
           {
             "name": "adjustedPlayersCompletedPercent",
-            "description": null,
+            "description": "Statistically adjusted percentage that accounts for active players, providing a more representative completion rate. Uses the percentage completion of Welcome to Tarkov as the baseline under the assumption that all active accounts have died once.",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -27,7 +27,7 @@
           },
           {
             "name": "description",
-            "description": null,
+            "description": "Text describing the conditions required to unlock the achievement (e.g., \"Neutralize Killa 15 times while playing as a PMC\").",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -39,7 +39,7 @@
           },
           {
             "name": "hidden",
-            "description": null,
+            "description": "Whether the achievement is hidden from players until unlocked (true) or visible from the start (false).",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -55,7 +55,7 @@
           },
           {
             "name": "id",
-            "description": null,
+            "description": "A unique 24-character hexadecimal identifier for the achievement. Follows a consistent format across all achievements.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -71,7 +71,7 @@
           },
           {
             "name": "name",
-            "description": null,
+            "description": "The display name of the achievement (e.g., \"Welcome to Tarkov\", \"The Kappa Path\").",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -87,7 +87,7 @@
           },
           {
             "name": "normalizedRarity",
-            "description": null,
+            "description": "Lowercase, standardized version of the rarity field used for consistent sorting and filtering (e.g., \"common\", \"rare\", \"legendary\").",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -99,7 +99,7 @@
           },
           {
             "name": "normalizedSide",
-            "description": null,
+            "description": "Lowercase, standardized version of the side field used for consistent sorting and filtering (e.g., \"pmc\", \"all\", \"scavs\").",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -111,7 +111,7 @@
           },
           {
             "name": "playersCompletedPercent",
-            "description": null,
+            "description": "Raw percentage of all players who have completed this achievement (e.g., 0.06, 43.48).",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -127,7 +127,7 @@
           },
           {
             "name": "rarity",
-            "description": null,
+            "description": "The difficulty/rarity tier of the achievement. Values include \"Common\", \"Rare\", or \"Legendary\".",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -139,7 +139,7 @@
           },
           {
             "name": "side",
-            "description": null,
+            "description": "The game faction or player type this achievement is associated with. Values include \"PMC\", \"All\", or \"Scavs\".",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -2089,7 +2089,7 @@
             "deprecationReason": null
           },
           {
-            "name": "LaserTargetPointers",
+            "name": "LaserAimingModules",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -2221,12 +2221,6 @@
             "deprecationReason": null
           },
           {
-            "name": "QuestItems",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "ReceiversSlides",
             "description": null,
             "isDeprecated": false,
@@ -2234,12 +2228,6 @@
           },
           {
             "name": "Rounds",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SMGs",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -2293,6 +2281,12 @@
             "deprecationReason": null
           },
           {
+            "name": "SubmachineGuns",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "Suppressors",
             "description": null,
             "isDeprecated": false,
@@ -2306,6 +2300,12 @@
           },
           {
             "name": "TacticalRigs",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TaskItems",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -4955,6 +4955,18 @@
           },
           {
             "name": "Revolver",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Rocket",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RocketLauncher",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -10775,6 +10787,18 @@
                 "name": "Int",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "levelBadgeImageLink",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

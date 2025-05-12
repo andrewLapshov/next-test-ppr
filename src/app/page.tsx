@@ -29,6 +29,7 @@ export default function Home() {
         <div className="flex gap-4 items-center flex-col sm:flex-row">
           <Link href={"/hideout"}>HIDEOUT</Link>
           <Link href={"/posts"}>POSTS</Link>
+          <Link href={"/items-tracker"}>ITEMS TRACKER</Link>
         </div>
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">

@@ -1,0 +1,134 @@
+{
+  "meta": {
+    "description": "Escape From Tarkov квесты, убежище, предметы, торговцы, трекер предметов",
+    "keywords": "eft, tarkov, тарков, eft квесты, eft убежище, eft предметы, eft торговцы, eft трекер предметов"
+  },
+  "Header": {
+    "itemsTracker": "Трекер предметов",
+    "hideout": "Убежище",
+    "login": "Войти",
+    "profile": "Профиль"
+  },
+  "Profile": {
+    "logout": "Выйти",
+    "goToMain": "На главную",
+    "noCharacters": "Нет персонажей",
+    "createCharacter": "Создать персонажа",
+    "deleteCharacter": "Удалить персонажа",
+    "characterName": "Имя персонажа",
+    "yes": "Да",
+    "cancel": "Отмена",
+    "level": "Уровень",
+    "faction": "Фракция"
+  },
+  "Character": {
+    "create": {
+      "title": "Создать персонажа",
+      "error": "Не удалось создать персонажа",
+      "uniqueNameError": "Персонаж с таким именем существует",
+      "tooManyCharacters": "Максимум 5 персонажей на аккаунт",
+      "nameMinSymbols": "Имя минимум 3 символа",
+      "nameRegexValidation": "Имя должно содержать только латинские буквы и цифры"
+    },
+    "delete": {
+      "title": "Удалить персонажа",
+      "error": "Не удалось удалить персонажа",
+      "accessDenied": "Отказано в доступе",
+      "notFound": "Персонаж не найден"
+    },
+    "change": {
+      "accessDenied": "Отказано в доступе",
+      "error": "Не удалось сменить персонажа"
+    }
+  },
+  "OAuthForm": {
+    "discord": "Войти через Discord",
+    "twitch": "Войти через Twitch",
+    "redirecting": "Перенаправляем..."
+  },
+  "AuthError": {
+    "title": "Ошибка авторизации",
+    "goToMain": "На главную"
+  },
+  "Main": {
+    "Search": {
+      "placeholder": "Найти предметы, задания, модули убежища"
+    }
+  },
+  "ItemsTracker": {
+    "title": "Трекер предметов",
+    "quests": "Квесты",
+    "hideout": "Убежище",
+    "searchItems": "Найти предмет",
+    "hideCompleted": "Скрывать завершенные"
+  },
+  "Item": {
+    "requiredForQuests": "Понадобится для квестов",
+    "requiredForHideout": "Понадобится для постройки убежища",
+    "Quest": "Квест",
+    "HideoutModule": "Модуль убежища"
+  },
+  "Quest": {
+    "objectives": "Цели квеста",
+    "finishRewards": "Награда за выполнение",
+    "startRewards": "Стартовое снаряжение",
+    "requiredItems": "Пригодится для прохождения",
+    "requiredQuests": "Необходимые квесты",
+    "unlockQuests": "Открывает квесты",
+    "starts": "Выдает",
+    "requiredLevel": "Требуется уровень",
+    "traderUnlock": "Открывает торговца",
+    "unlockCrafts": "Открывает крафты",
+    "offersUnlock": "Открывает предложения",
+    "failureOutcome": "Штрафы за провал",
+    "exp": "{exp} опыта",
+    "rep": "{rep} репутации"
+  },
+  "Hideout": {
+    "title": "Убежище",
+    "selectModule": "Выберите модуль убежища",
+    "level": "Уровень",
+    "constructionTime": "Время строительства",
+    "description": "Описание",
+    "requiredItems": "Требуемые предметы",
+    "requiredModules": "Требуемые модули",
+    "requiredSkills": "Требуемые навыки",
+    "requiredTraders": "Требуемые торговцы",
+    "bonuses": "Бонусы"
+  },
+  "Footer": {
+    "licence": "Игровой контент и материалы являются торговыми марками и авторскими правами Battlestate Games и ее лицензиаров. Все права защищены.",
+    "buy": "Приобрести игру",
+    "tarkovApi": "Приложение использует Tarkov API"
+  },
+  "entities": {
+    "Item": {
+      "foundInRaid": "Найдено в рейде",
+      "canBeCrafted": "Может быть создано",
+      "kappaRequired": "Нужно для Каппы",
+      "sellToTrader": "Продать торговцу",
+      "buyFromTrader": "Купить у торговца",
+      "sellToFlea": "Продать на барахолке",
+      "avg24hPrice": "Средняя цена за 24ч",
+      "fleaPrice": "Цена на барахолке",
+      "profit": "Профит",
+      "lastLowPrice": "Последняя min цена",
+      "updatedAt": "Обновлено {date}",
+      "vendorLoyaltyLevel": "{level} уровень лояльности",
+      "questRequired": "Требуется квест",
+      "fleaBanned": "Забанен на барахолке",
+      "craftsFor": "Крафтится с помощью",
+      "craftsUsing": "Используется для крафта",
+      "bartersFor": "Бартер",
+      "bartersUsing": "Используется для бартера",
+      "module": "Модуль",
+      "trader": "Торговец",
+      "amount": "Количество",
+      "items": "Предметы"
+    }
+  },
+  "NotFoundPage": {
+    "title": "Страница не найдена",
+    "mainLink": "На главную"
+  }
+}

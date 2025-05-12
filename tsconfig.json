@@ -22,8 +22,20 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./src/*"
+      "app/*": [
+        "./src/app/*"
+      ],
+      "widgets/*": [
+        "./src/widgets/*"
+      ],
+      "features/*": [
+        "./src/features/*"
+      ],
+      "shared/*": [
+        "./src/shared/*"
+      ],
+      "infrastructure/*": [
+        "./src/infrastructure/*"
       ]
     },
     "strict": false
