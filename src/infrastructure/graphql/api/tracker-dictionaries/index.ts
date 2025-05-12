@@ -2,6 +2,7 @@ import { getClient } from "../../config";
 import { FleaQuery } from "./flea-query";
 import { HideoutQuery } from "./hideout-query";
 import { TradersQuery } from "./traders-query";
+import { unstable_cache } from "shared/lib/utils/unstable-cache";
 
 export const fetchHideoutDictionary = () => {
   return getClient().query({
@@ -46,3 +47,12 @@ export const fetchTradersDictionary = () => {
     }),
   ]);
 };
+
+export const fetchTradersDictionaryCached = unstable_cache(
+  fetchTradersDictionary,
+  ["fetchTradersDictionary"],
+  {
+    revalidate: 3600 * 24 * 7,
+    tags: ["fetchTradersDictionary"],
+  },
+);

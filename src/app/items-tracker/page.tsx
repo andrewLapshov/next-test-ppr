@@ -1,6 +1,6 @@
-import { fetchTotalItemsCached } from "./api";
-import { fetchDictionariesCached } from "infrastructure/graphql/api/dictionaries/api/fetch-dictionaries";
-import { fetchItemsTrackerListCached } from "./api/fetch-items-tracker-list";
+// import { fetchTotalItemsCached } from "./api";
+import { fetchTradersDictionaryCached } from "infrastructure/graphql/api/tracker-dictionaries";
+// import { fetchItemsTrackerListCached } from "./api/fetch-items-tracker-list";
 
 const FilterTypes = {
   hideCompleted: "hideCompleted",
@@ -19,10 +19,14 @@ type Props = {
 };
 
 const ItemsTracker = async ({ searchParams }: Props) => {
-  const [dictionaries, totalItems, itemsTrackerList] = await Promise.all([
-    fetchDictionariesCached(),
-    fetchTotalItemsCached(),
-    fetchItemsTrackerListCached(),
+  const [
+    dictionaries,
+    // totalItems,
+    // itemsTrackerList
+  ] = await Promise.all([
+    fetchTradersDictionaryCached(),
+    // fetchTotalItemsCached(),
+    // fetchItemsTrackerListCached(),
   ]);
 
   const { filters, search } = await searchParams;
@@ -37,9 +41,9 @@ const ItemsTracker = async ({ searchParams }: Props) => {
   return (
     <div className={"flex flex-col gap-1"}>
       ItemsTracker
-      <span>{Object.keys(dictionaries.traders).length}</span>
-      <span>{Object.keys(totalItems).length}</span>
-      <span>{Object.keys(itemsTrackerList).length}</span>
+      <span>{Object.keys(dictionaries[0]?.data?.traders).length}</span>
+      {/*<span>{Object.keys(totalItems).length}</span>*/}
+      {/*<span>{Object.keys(itemsTrackerList).length}</span>*/}
       <li>showQuests: {showQuests}</li>
       <li>showHideout: {showHideout}</li>
       <li>hideCompleted: {hideCompleted}</li>
