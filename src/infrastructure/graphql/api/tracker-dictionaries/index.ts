@@ -48,20 +48,6 @@ export const fetchTradersDictionary = () => {
   ]);
 };
 
-export const fetchTraders = () =>
-  getClient().query({
-    query: TradersQuery,
-    context: {
-      fetchOptions: {
-        cache: "force-cache",
-        next: {
-          revalidate: 60 * 60 * 24 * 7, // 1 неделя
-        },
-      },
-    },
-    variables: { lang: "ru" },
-  });
-
 export const fetchTradersDictionaryCached = unstable_cache(
   fetchTradersDictionary,
   ["fetchTradersDictionary"],

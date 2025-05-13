@@ -13,7 +13,17 @@ if (process.env.NODE_ENV === "development") {
 
 export const { query, getClient } = registerApolloClient(() => {
   return new ApolloClient({
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        Item: {
+          fields: {
+            properties: {
+              merge: true,
+            },
+          },
+        },
+      },
+    }),
     link: new HttpLink({
       uri: "https://api.tarkov.dev/graphql",
       // you can disable result caching here if you want to
