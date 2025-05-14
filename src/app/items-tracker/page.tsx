@@ -1,10 +1,10 @@
-import { fetchTotalItemsCached } from "./api";
 import { fetchTradersDictionaryCached } from "infrastructure/graphql/api/tracker-dictionaries";
 import { fetchItemsTrackerListCached } from "./api/fetch-items-tracker-list";
 import { TrackerClient } from "./tracker-client";
 
 export const revalidate = 86_400;
 export const dynamicParams = true;
+export const generateStaticParams = async () => [];
 
 // type Props = {
 //   searchParams: Promise<{
@@ -14,16 +14,15 @@ export const dynamicParams = true;
 // };
 
 const ItemsTracker = async () => {
-  const [, totalItems, itemsTrackerList] = await Promise.all([
+  const [, itemsTrackerList] = await Promise.all([
     fetchTradersDictionaryCached(),
-    fetchTotalItemsCached(),
     fetchItemsTrackerListCached(),
   ]);
 
   return (
     <div className={"flex flex-col gap-1"}>
       ItemsTracker
-      <TrackerClient totalItems={totalItems} itemsTracker={itemsTrackerList} />
+      <TrackerClient itemsTracker={itemsTrackerList} />
     </div>
   );
 };
