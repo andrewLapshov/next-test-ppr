@@ -35,7 +35,7 @@ export const fetchTotalItemsCached = unstable_cache(
   fetchTotalItems,
   [Tags.fetchItemsTrackerTotalItems],
   {
-    revalidate: 3600 * 24,
+    revalidate: 3600 * 24 * 7,
     tags: [Tags.fetchItemsTrackerTotalItems],
   },
 );
