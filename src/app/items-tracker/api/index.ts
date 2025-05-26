@@ -1,4 +1,4 @@
-import { fetchAllItemsDataCached } from "infrastructure/graphql/api/items";
+import { fetchAllItems } from "infrastructure/graphql/api/items";
 import { normalize, schema } from "normalizr";
 import { unstable_cache } from "shared/lib/utils/unstable-cache";
 
@@ -14,7 +14,7 @@ const totalItemsSchema = new schema.Entity(
 const fetchTotalItems = async (): Promise<
   Record<string, TrackerExtItemClient>
 > => {
-  const rawTotalItemsData = await fetchAllItemsDataCached();
+  const rawTotalItemsData = await fetchAllItems();
 
   const extTotalItemsData = rawTotalItemsData.data.items.filter(Boolean);
   // .map((item) => prepareExtItem(item!, { locale }));

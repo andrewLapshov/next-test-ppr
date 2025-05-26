@@ -23,26 +23,26 @@ export const fetchTradersDictionary = () => {
   return Promise.all([
     getClient().query({
       query: TradersQuery,
-      context: {
-        fetchOptions: {
-          cache: "force-cache",
-          next: {
-            revalidate: 60 * 60 * 24 * 7, // 1 неделя
-          },
-        },
-      },
+      // context: {
+      //   fetchOptions: {
+      //     cache: "force-cache",
+      //     next: {
+      //       revalidate: 60 * 60 * 24 * 7, // 1 неделя
+      //     },
+      //   },
+      // },
       variables: { lang: "ru" },
     }),
     getClient().query({
       query: FleaQuery,
-      context: {
-        fetchOptions: {
-          cache: "force-cache",
-          next: {
-            revalidate: 60 * 60 * 24 * 7, // 1 неделя
-          },
-        },
-      },
+      // context: {
+      //   fetchOptions: {
+      //     cache: "force-cache",
+      //     next: {
+      //       revalidate: 60 * 60 * 24 * 7, // 1 неделя
+      //     },
+      //   },
+      // },
       variables: { lang: "ru" },
     }),
   ]);

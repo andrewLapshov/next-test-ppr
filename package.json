@@ -20,10 +20,11 @@
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3",
     "@graphql-codegen/cli": "5.0.5",
     "@graphql-codegen/client-preset": "4.8.0",
     "@graphql-codegen/introspection": "4.0.3",
-    "@eslint/eslintrc": "^3",
+    "@parcel/watcher": "^2.5.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
