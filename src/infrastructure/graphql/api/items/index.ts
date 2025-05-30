@@ -1,11 +1,7 @@
 import { getClient } from "../../config";
-// import { Tags } from "../../tags";
 import { allItemsQuery } from "./all-items-query";
-import { fetchItemsTrackerListCached } from "app/items-tracker/api/fetch-items-tracker-list";
 
-export const fetchAllItems = async () => {
-  const trackerItemsIds = (await fetchItemsTrackerListCached()).itemsIds;
-
+export const fetchAllItems = async (ids?: string[]) => {
   return getClient().query({
     query: allItemsQuery,
     // context: {
@@ -17,6 +13,6 @@ export const fetchAllItems = async () => {
     //     },
     //   },
     // },
-    variables: { lang: "ru", ids: trackerItemsIds },
+    variables: { lang: "ru", ids: ids },
   });
 };

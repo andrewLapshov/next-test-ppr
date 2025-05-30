@@ -11,10 +11,10 @@ const totalItemsSchema = new schema.Entity(
   { idAttribute: "id" },
 );
 
-const fetchTotalItems = async (): Promise<
-  Record<string, TrackerExtItemClient>
-> => {
-  const rawTotalItemsData = await fetchAllItems();
+const fetchTotalItems = async (
+  ids: string[],
+): Promise<Record<string, TrackerExtItemClient>> => {
+  const rawTotalItemsData = await fetchAllItems(ids);
 
   const extTotalItemsData = rawTotalItemsData.data.items.filter(Boolean);
   // .map((item) => prepareExtItem(item!, { locale }));
