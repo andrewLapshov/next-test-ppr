@@ -1,8 +1,9 @@
 import { getClient } from "../../config";
 import { allItemsQuery } from "./all-items-query";
 import { Tags } from "../../tags";
+import { cache } from "react";
 
-export const fetchAllItems = async (ids?: string[]) => {
+export const fetchAllItems = cache(async (ids?: string[]) => {
   return getClient().query({
     query: allItemsQuery,
     context: {
@@ -14,6 +15,6 @@ export const fetchAllItems = async (ids?: string[]) => {
         },
       },
     },
-    variables: { lang: "ru", ids: ids },
+    variables: { lang: "ru", ids },
   });
-};
+});

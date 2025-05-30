@@ -1,10 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { removeTypename } from "shared/lib/utils/remove-typename";
-import { fetchTotalItemsCached } from "../../../../items-tracker/api";
-import { fetchItemsTrackerListCached } from "../../../../items-tracker/api/fetch-items-tracker-list";
-
-const SPLIT_STEP = 8;
+import { fetchAllItems } from "infrastructure/graphql/api/items";
 
 export async function GET(
   _: NextRequest,
@@ -13,31 +10,20 @@ export async function GET(
   const { id } = await params;
 
   try {
-    const trackerItemsIds = (await fetchItemsTrackerListCached()).itemsIds;
-    const chunkLength = Math.ceil(trackerItemsIds.length / SPLIT_STEP);
+    const itemData = await fetchAllItems([id]);
 
-    const itemsDataChunks = await Promise.all(
-      [...new Array(SPLIT_STEP)].map(async (_, index) => {
-        const offset = index * chunkLength;
-        const chunk = trackerItemsIds.slice(offset, offset + chunkLength - 1);
-
-        return fetchTotalItemsCached(chunk);
-      }),
-    );
-
-    const chunkWithData = itemsDataChunks.find((dataChunk) => !!dataChunk[id]);
-
-    if (!chunkWithData) {
+    if (!itemData) {
       return NextResponse.json(
         { error: "Failed to get item data" },
         { status: 500 },
       );
     }
 
-    return NextResponse.json(removeTypename(chunkWithData[id]), {
+    return NextResponse.json(removeTypename(itemData), {
       status: 200,
     });
-  } catch {
+  } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { error: "Failed to get item data" },
       { status: 500 },
