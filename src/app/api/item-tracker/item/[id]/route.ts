@@ -8,11 +8,12 @@ export async function GET(_, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   try {
-    const { idsInChunkMap } = await fetchAllItemsKeysCached();
+    const { idsInChunkMap, chunksOfIds } = await fetchAllItemsKeysCached();
 
     const chunkIndex = idsInChunkMap[id];
+    const chunkIds = chunksOfIds[chunkIndex];
 
-    const chunkData = await fetchTotalItemsCached(chunkIndex);
+    const chunkData = await fetchTotalItemsCached(chunkIds);
 
     const itemData = chunkData[id];
 

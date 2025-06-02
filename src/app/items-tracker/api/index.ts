@@ -5,8 +5,6 @@ import { unstable_cache } from "shared/lib/utils/unstable-cache";
 import { TrackerExtItemClient } from "../types";
 import { Tags } from "infrastructure/graphql/tags";
 
-import { fetchAllItemsKeysCached } from "infrastructure/graphql/api/items/prepare-all-items-keys";
-
 const totalItemsSchema = new schema.Entity(
   "totalItems",
   {},
@@ -14,12 +12,8 @@ const totalItemsSchema = new schema.Entity(
 );
 
 const fetchTotalItems = async (
-  chunkIndex: number,
+  chunkIds: string[],
 ): Promise<Record<string, TrackerExtItemClient>> => {
-  const { chunksOfIds } = await fetchAllItemsKeysCached();
-
-  const chunkIds = chunksOfIds[chunkIndex];
-
   const rawData = await fetchAllItems(chunkIds);
 
   const extTotalItemsData = rawData.data.items.filter(Boolean);

@@ -25,7 +25,7 @@ const ItemsTracker = async () => {
   const { chunksOfIds } = await fetchAllItemsKeysCached();
 
   await Promise.all(
-    chunksOfIds.map((_, index) => fetchTotalItemsCached(index)),
+    chunksOfIds.map((chunkIds) => fetchTotalItemsCached(chunkIds)),
   );
 
   return (
