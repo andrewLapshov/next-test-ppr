@@ -4,8 +4,8 @@ import { unstable_cache } from "shared/lib/utils/unstable-cache";
 
 import { TrackerExtItemClient } from "../types";
 import { Tags } from "infrastructure/graphql/tags";
-import { fetchItemsTrackerListCached } from "./fetch-items-tracker-list";
-import { TOTAL_ITEMS_SPLIT_STEP } from "../constants";
+
+import { fetchAllItemsKeysCached } from "infrastructure/graphql/api/items/prepare-all-items-keys";
 
 const totalItemsSchema = new schema.Entity(
   "totalItems",
@@ -16,17 +16,13 @@ const totalItemsSchema = new schema.Entity(
 const fetchTotalItems = async (
   chunkIndex: number,
 ): Promise<Record<string, TrackerExtItemClient>> => {
-  const trackerItemsIds = (await fetchItemsTrackerListCached()).itemsIds;
-  const chunkLength = Math.ceil(
-    trackerItemsIds.length / TOTAL_ITEMS_SPLIT_STEP,
-  );
+  const { chunksOfIds } = await fetchAllItemsKeysCached();
 
-  const offset = chunkIndex * chunkLength;
-  const chunkIds = trackerItemsIds.slice(offset, offset + chunkLength - 1);
+  const chunkIds = chunksOfIds[chunkIndex];
 
-  const rawTotalItemsData = await fetchAllItems(chunkIds);
+  const rawData = await fetchAllItems(chunkIds);
 
-  const extTotalItemsData = rawTotalItemsData.data.items.filter(Boolean);
+  const extTotalItemsData = rawData.data.items.filter(Boolean);
   // .map((item) => prepareExtItem(item!, { locale }));
 
   const normalizedExtTotalItemsData = normalize<TrackerExtItemClient>(

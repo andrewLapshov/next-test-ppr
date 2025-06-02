@@ -1,19 +1,18 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 import { removeTypename } from "shared/lib/utils/remove-typename";
 import { fetchTotalItemsCached } from "../../../../items-tracker/api";
+import { fetchAllItemsKeysCached } from "infrastructure/graphql/api/items/prepare-all-items-keys";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function GET(_, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  const { searchParams } = new URL(request.url);
-  const chunk = searchParams.get("chunk");
-
   try {
-    const chunkData = await fetchTotalItemsCached(Number(chunk));
+    const { idsInChunkMap } = await fetchAllItemsKeysCached();
+
+    const chunkIndex = idsInChunkMap[id];
+
+    const chunkData = await fetchTotalItemsCached(chunkIndex);
 
     const itemData = chunkData[id];
 

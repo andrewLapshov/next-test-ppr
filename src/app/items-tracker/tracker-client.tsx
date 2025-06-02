@@ -55,7 +55,7 @@ export const TrackerClient = ({ itemsTracker }: Props) => {
                       try {
                         setIsLoading(true);
                         setSelectedId(id);
-                        const response = await getTrackerItem(id, index);
+                        const response = await getTrackerItem(id);
                         setItemData(response);
                         setIsLoading(false);
                       } catch (error) {
