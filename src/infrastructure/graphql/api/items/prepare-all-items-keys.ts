@@ -1,17 +1,13 @@
 import { fetchAllItems } from "./index";
 import { unstable_cache } from "shared/lib/utils/unstable-cache";
 
-const MAX_CHUNK_SIZE = 500_000; // Лимит кеша 2МБ, берем с небольшим запасом (vercel не пропускает)
+const MAX_CHUNK_SIZE = 300_000; // Лимит кеша 2МБ, берем с небольшим запасом (vercel не пропускает)
 
 function splitArrayByByteLength<T>(array: T[]) {
   const result: T[][] = [];
-  // const resultSize = [];
-  const ranges: [number, number][] = [];
+  const resultSize = [];
   let chunk: T[] = [];
   let chunkSize = 0;
-
-  let chunkIndex = 0;
-  let itemIndex = 0;
 
   for (const item of array) {
     const itemString = JSON.stringify(item);
@@ -22,41 +18,25 @@ function splitArrayByByteLength<T>(array: T[]) {
       if (chunk.length === 0) {
         // Если один элемент превышает лимит, кладём его отдельно
         result.push([item]);
-        // resultSize.push(itemSize / 1024 / 1024);
-        ranges[chunkIndex + 1] = [
-          chunkIndex === 0 ? 0 : ranges[chunkIndex][1] + 1,
-          itemIndex,
-        ];
+        resultSize.push(itemSize / 1024 / 1024);
         chunkSize = 0;
         chunk = [];
       } else {
         // Сохраняем текущий чанк и начинаем новый
         result.push(chunk);
-        ranges[chunkIndex] = [
-          chunkIndex === 0 ? 0 : ranges[chunkIndex - 1][1] + 1,
-          itemIndex,
-        ];
-        // resultSize.push(chunkSize / 1024 / 1024);
+        resultSize.push(chunkSize / 1024 / 1024);
         chunk = [item];
         chunkSize = itemSize;
       }
-
-      chunkIndex++;
     } else {
       chunk.push(item);
       chunkSize += itemSize;
     }
-
-    itemIndex++;
   }
 
   // Добавляем последний чанк, если он не пустой
   if (chunk.length > 0) {
     result.push(chunk);
-    ranges[chunkIndex] = [
-      chunkIndex === 0 ? 0 : ranges[chunkIndex - 1][1] + 1,
-      itemIndex - 1,
-    ];
   }
   // console.log(array.length);
   // console.log("splitRanges:", ranges);
@@ -68,15 +48,13 @@ function splitArrayByByteLength<T>(array: T[]) {
   //   console.log(`${index}:`, item.length);
   // });
 
-  return { chunkRanges: ranges, dataChunks: result };
+  return result;
 }
 
 export const prepareAllItemsKeys = async () => {
   const totalData = await fetchAllItems(undefined, undefined, false);
 
-  const { dataChunks, chunkRanges } = splitArrayByByteLength(
-    totalData.data.items,
-  );
+  const dataChunks = splitArrayByByteLength(totalData.data.items);
 
   const idsInChunkMap = dataChunks.reduce<Record<string, number>>(
     (acc, chunk, index) => {
@@ -87,6 +65,16 @@ export const prepareAllItemsKeys = async () => {
       return acc;
     },
     {},
+  );
+
+  const chunkRanges = dataChunks.reduce<[number, number][]>(
+    (acc, chunk, chunkNumber) => {
+      const startIndex = chunkNumber === 0 ? 0 : acc[chunkNumber - 1][1];
+      acc[chunkNumber] = [startIndex, startIndex + chunk.length];
+
+      return acc;
+    },
+    [],
   );
 
   return { idsInChunkMap, chunkRanges };
