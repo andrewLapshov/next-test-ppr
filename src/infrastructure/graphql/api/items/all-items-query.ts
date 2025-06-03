@@ -1,8 +1,8 @@
 import { graphql } from "../../generated";
 
 export const allItemsQuery = graphql(`
-  query allItems($lang: LanguageCode, $ids: [ID]) {
-    items(lang: $lang, ids: $ids) {
+  query allItems($lang: LanguageCode, $offset: Int, $limit: Int) {
+    items(lang: $lang, offset: $offset, limit: $limit) {
       ...BaseItemFields
       ...BaseProperties
     }

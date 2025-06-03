@@ -12,9 +12,12 @@ const totalItemsSchema = new schema.Entity(
 );
 
 const fetchTotalItems = async (
-  chunkIds: string[],
+  itemsRange: [number, number],
 ): Promise<Record<string, TrackerExtItemClient>> => {
-  const rawData = await fetchAllItems(chunkIds);
+  const offset = itemsRange[0];
+  const limit = itemsRange[1] - offset;
+
+  const rawData = await fetchAllItems(offset, limit);
 
   const extTotalItemsData = rawData.data.items.filter(Boolean);
   // .map((item) => prepareExtItem(item!, { locale }));

@@ -22,11 +22,9 @@ const ItemsTracker = async () => {
   ]);
 
   // Прогрев кеша
-  const { chunksOfIds } = await fetchAllItemsKeysCached();
+  const { chunkRanges } = await fetchAllItemsKeysCached();
 
-  await Promise.all(
-    chunksOfIds.map((chunkIds) => fetchTotalItemsCached(chunkIds)),
-  );
+  await Promise.all(chunkRanges.map((range) => fetchTotalItemsCached(range)));
 
   return (
     <div className={"flex flex-col gap-1"}>
