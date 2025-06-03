@@ -1,7 +1,7 @@
 import { fetchAllItems } from "./index";
 import { unstable_cache } from "shared/lib/utils/unstable-cache";
 
-const MAX_CHUNK_SIZE = 1_900_000; // Лимит кеша 2МБ, берем с небольшим запасом
+const MAX_CHUNK_SIZE = 1_700_000; // Лимит кеша 2МБ, берем с небольшим запасом (vercel не пропускает)
 
 function splitArrayByByteLength<T>(array: T[]) {
   const result: T[][] = [];
