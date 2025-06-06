@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { TestButtons } from "shared/ui/test-buttons";
 
 export default function Home() {
   return (
@@ -31,6 +32,8 @@ export default function Home() {
           <Link href={"/posts"}>POSTS</Link>
           <Link href={"/items-tracker"}>ITEMS TRACKER</Link>
         </div>
+
+        <TestButtons />
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
         <a
