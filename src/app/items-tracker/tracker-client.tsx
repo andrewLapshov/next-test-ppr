@@ -2,7 +2,10 @@
 
 import { useSearchParams } from "next/navigation";
 import { fetchItemsTrackerList } from "./api/fetch-items-tracker-list";
-import { getTrackerItem } from "./api/client/get-tracker-item";
+import {
+  getTrackerItem,
+  purgeTrackerCache,
+} from "./api/client/get-tracker-item";
 import { Fragment, useState } from "react";
 import { TrackerExtItemClient } from "./types";
 import { TOTAL_ITEMS_SPLIT_STEP } from "./constants";
@@ -34,6 +37,14 @@ export const TrackerClient = ({ itemsTracker }: Props) => {
     <div className={"flex flex-col gap-1"}>
       <span>{filters}</span>
       <span>{search}</span>
+
+      <button
+        className={"border rounded-md self-start p-1"}
+        onClick={purgeTrackerCache}
+      >
+        PURGE CACHE
+      </button>
+
       <div className={"flex flex-col gap-2"}>
         {[...new Array(TOTAL_ITEMS_SPLIT_STEP)].map((_, index) => {
           const offset = index * chunkLength;

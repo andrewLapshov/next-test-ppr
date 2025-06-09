@@ -22,3 +22,12 @@ export const fetchAllItems = cache(
     });
   },
 );
+
+export const fetchAllItemsUncached = cache(
+  async (locale: "ru" | "en", offset?: number, limit?: number) => {
+    return getClient().query({
+      query: allItemsQuery,
+      variables: { lang: locale, offset, limit },
+    });
+  },
+);

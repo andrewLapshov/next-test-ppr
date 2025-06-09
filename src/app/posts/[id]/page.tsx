@@ -1,6 +1,6 @@
 import { getPost, getPosts } from "../api";
 
-interface Post {
+export interface Post {
   id: number;
   title: string;
   body: string;

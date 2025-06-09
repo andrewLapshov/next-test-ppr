@@ -1,5 +1,9 @@
-const query = `
-  query hideoutQuery($lang: LanguageCode) {
+import { graphql } from "infrastructure/graphql/generated";
+import { getClient } from "infrastructure/graphql/config";
+import { Tags } from "infrastructure/graphql/tags";
+
+const query = graphql(`
+  query hideoutQueryModules($lang: LanguageCode) {
     hideoutStations(lang: $lang) {
       id
       imageLink
@@ -56,21 +60,35 @@ const query = `
       }
     }
   }
-`;
-
+`);
 export const fetchHideoutItems = async () => {
-  return fetch("https://api.tarkov.dev/graphql", {
-    body: JSON.stringify({
-      query,
-      variables: { lang: "ru" },
-    }),
-    cache: "force-cache",
-    headers: {
-      "Content-Type": "application/json",
+  return getClient().query({
+    query,
+    context: {
+      fetchOptions: {
+        cache: "force-cache",
+        next: {
+          revalidate: 60 * 60 * 24, // 1 день
+          tags: [Tags.fetchHideoutModulesPage],
+        },
+      },
     },
-    method: "POST",
-    next: { revalidate: 60 * 60 * 24 },
-  })
-    .then((response) => response.json())
-    .then((data) => data);
+  });
 };
+
+// export const fetchHideoutItems = async () => {
+//   return fetch("https://api.tarkov.dev/graphql", {
+//     body: JSON.stringify({
+//       query,
+//       variables: { lang: "ru" },
+//     }),
+//     cache: "force-cache",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     method: "POST",
+//     next: { revalidate: 60 * 60 * 24 },
+//   })
+//     .then((response) => response.json())
+//     .then((data) => data);
+// };
