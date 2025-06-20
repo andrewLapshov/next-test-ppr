@@ -17,3 +17,11 @@ export const purgeTrackerCache = async (): Promise<TrackerExtItemClient> => {
   }
   return response.json();
 };
+
+export const warmupTrackerCache = async (): Promise<void> => {
+  const response = await fetch(`/api/items-tracker/item/warmup`, {});
+  if (!response.ok) {
+    throw new Error("Failed to warmup");
+  }
+  return response.json();
+};

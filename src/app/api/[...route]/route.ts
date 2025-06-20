@@ -1,15 +1,18 @@
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
-import { TrackerExtItemClient } from "../../items-tracker/types";
 // import { allItemsKeysQuery } from "infrastructure/graphql/api/items/all-items-keys";
 // import { getClient } from "infrastructure/graphql/config";
 // import { allItemsQuery } from "infrastructure/graphql/api/items/all-items-query";
 import { fetchAllItems } from "infrastructure/graphql/api/items";
-import { normalize, schema } from "normalizr";
 import { NextResponse } from "next/server";
 import { removeTypename } from "shared/lib/utils/remove-typename";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 export const dynamic = "force-dynamic";
+import Cloudflare from "cloudflare";
+
+const client = new Cloudflare({
+  apiToken: "IRtQEue87UaHsu9wtcK6jNkWfOHGd4HRPy5xbT9v",
+});
 
 const app = new Hono<{ Bindings: CloudflareEnv }>().basePath("/api");
 
@@ -26,12 +29,6 @@ app.get("/:wild", (c) => {
   });
 });
 
-const totalItemsSchema = new schema.Entity(
-  "totalItems",
-  {},
-  { idAttribute: "id" },
-);
-
 app.get("/items-tracker/purge", async (c) => {
   await getCloudflareContext().env.NEXT_INC_CACHE_KV.delete("ALL_ITEMS");
 
@@ -40,89 +37,76 @@ app.get("/items-tracker/purge", async (c) => {
   });
 });
 
-app.get("/items-tracker/item/:id", async (c) => {
-  // const cachedChunk1 = (await c.env.NEXT_INC_CACHE_KV.get("ALL_ITEMS_0", {
-  //   type: "json",
-  // })) as Record<string, TrackerExtItemClient> | null;
-  // const cachedChunk2 = (await c.env.NEXT_INC_CACHE_KV.get("ALL_ITEMS_0", {
-  //   type: "json",
-  // })) as Record<string, TrackerExtItemClient> | null;
+app.get("/items-tracker/item/warmup", async () => {
+  let cachedFlag: Response | null = null;
 
-  const cached = (await getCloudflareContext().env.NEXT_INC_CACHE_KV.get(
-    "ALL_ITEMS",
-    {
-      type: "json",
-    },
-  )) as Record<string, TrackerExtItemClient> | null;
+  try {
+    cachedFlag = await client.kv.namespaces.values.get(
+      "1bbebb4e023a436c8dcb532e4715df2c",
+      "items-tracker-all-items-set",
+      {
+        account_id: "eabd94460dcbcf675f80a7579c07956a",
+      },
+    );
+  } catch (e) {
+    console.log("key error", e);
+  }
 
-  let items = cached;
-
-  if (!cached) {
+  if (!cachedFlag) {
     console.log("❌ MISS CACHE FOR ALL ITEMS...");
-    // if (!cachedChunk1 && !cachedChunk2) {
-    // const allKeys = await getClient().query({
-    //   query: allItemsKeysQuery,
-    //   variables: { lang: "ru" },
-    // });
-    //
-    // const totalItemsLength = allKeys.data.items.length;
-    //
-    // const chunksParams = [
-    //   { offset: 0, limit: totalItemsLength / 2 },
-    //   { offset: totalItemsLength / 2, limit: totalItemsLength / 2 },
-    // ];
-
-    // const result: Record<string, TrackerExtItemClient>[] = [];
-
-    // for (let i = 0; i < chunksParams.length; i++) {
-    //   const chunksParam = chunksParams[i];
-    //   const { offset, limit } = chunksParam;
 
     const rawData = await fetchAllItems(undefined, undefined, false);
 
-    const extTotalItemsData = rawData.data.items.filter(Boolean);
-    // .map((item) => prepareExtItem(item!, { locale }));
+    const totalItemsKeyValue = rawData.data.items
+      .filter(Boolean)
+      .map((item) => ({
+        key: `items-tracker-total-items-"${item.id}`,
+        value: JSON.stringify(item),
+        expiration_ttl: 60 * 60 * 24,
+      }));
 
-    const normalizedExtTotalItemsData = normalize<TrackerExtItemClient>(
-      extTotalItemsData,
-      [totalItemsSchema],
-    );
-
-    if (!normalizedExtTotalItemsData.entities.totalItems) {
-      throw new Error("No total items found");
-    }
-
-    const chunk = removeTypename(
-      normalizedExtTotalItemsData.entities.totalItems,
-    );
-
-    try {
-      await getCloudflareContext().env.NEXT_INC_CACHE_KV.put(
-        `ALL_ITEMS`,
-        JSON.stringify(chunk),
+    await client.kv.namespaces.bulkUpdate("1bbebb4e023a436c8dcb532e4715df2c", {
+      account_id: "eabd94460dcbcf675f80a7579c07956a",
+      body: totalItemsKeyValue,
+    });
+    await client.kv.namespaces.bulkUpdate("1bbebb4e023a436c8dcb532e4715df2c", {
+      account_id: "eabd94460dcbcf675f80a7579c07956a",
+      body: [
         {
-          expirationTtl: 3600 * 24,
+          key: "items-tracker-all-items-set",
+          value: "SET",
+          expiration_ttl: 60 * 60 * 24,
         },
-      );
-    } catch (error) {
-      console.log("CACHE ERROR:", error);
-    }
+      ],
+    });
 
     console.log("💾 CACHE SET!");
-    items = chunk;
-    // result.push(chunk)
-    // }
-
-    // }
   } else {
-    console.log("🎯 CACHE HIT!");
+    console.log("🎯 CACHE READY!");
   }
 
+  // for (const chunk of result) {
+  return NextResponse.json(
+    { success: true },
+    {
+      status: 200,
+    },
+  );
+});
+
+app.get("/items-tracker/item/:id", async (c) => {
   const id = c.req.param("id");
 
-  // for (const chunk of result) {
-  if (items[id]) {
-    return NextResponse.json(items[id], {
+  const cachedItem = await client.kv.namespaces.values.get(
+    "1bbebb4e023a436c8dcb532e4715df2c",
+    `items-tracker-total-items-"${id}`,
+    { account_id: "eabd94460dcbcf675f80a7579c07956a" },
+  );
+
+  const itemData = await cachedItem.json();
+
+  if (itemData) {
+    return NextResponse.json(removeTypename(itemData), {
       status: 200,
     });
   }

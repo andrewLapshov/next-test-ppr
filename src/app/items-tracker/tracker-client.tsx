@@ -5,6 +5,7 @@ import { fetchItemsTrackerList } from "./api/fetch-items-tracker-list";
 import {
   getTrackerItem,
   purgeTrackerCache,
+  warmupTrackerCache,
 } from "./api/client/get-tracker-item";
 import { Fragment, useState } from "react";
 import { TrackerExtItemClient } from "./types";
@@ -43,6 +44,13 @@ export const TrackerClient = ({ itemsTracker }: Props) => {
         onClick={purgeTrackerCache}
       >
         PURGE CACHE
+      </button>
+
+      <button
+        className={"border rounded-md self-start p-1"}
+        onClick={warmupTrackerCache}
+      >
+        WARMUP
       </button>
 
       <div className={"flex flex-col gap-2"}>
