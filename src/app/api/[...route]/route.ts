@@ -48,12 +48,13 @@ app.get("/items-tracker/item/:id", async (c) => {
   //   type: "json",
   // })) as Record<string, TrackerExtItemClient> | null;
 
-  const cached = (await getCloudflareContext().env.NEXT_INC_CACHE_KV.get(
-    "ALL_ITEMS",
-    {
-      type: "json",
-    },
-  )) as Record<string, TrackerExtItemClient> | null;
+  const cached = (await (
+    await getCloudflareContext({
+      async: true,
+    })
+  ).env.NEXT_INC_CACHE_KV.get("ALL_ITEMS", {
+    type: "json",
+  })) as Record<string, TrackerExtItemClient> | null;
 
   let items = cached;
 
@@ -97,13 +98,13 @@ app.get("/items-tracker/item/:id", async (c) => {
     );
 
     try {
-      await getCloudflareContext().env.NEXT_INC_CACHE_KV.put(
-        `ALL_ITEMS`,
-        JSON.stringify(chunk),
-        {
-          expirationTtl: 3600 * 24,
-        },
-      );
+      await (
+        await getCloudflareContext({
+          async: true,
+        })
+      ).env.NEXT_INC_CACHE_KV.put(`ALL_ITEMS`, JSON.stringify(chunk), {
+        expirationTtl: 3600 * 24,
+      });
     } catch (error) {
       console.log("CACHE ERROR:", error);
     }
