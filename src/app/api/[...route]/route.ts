@@ -95,20 +95,24 @@ app.get("/items-tracker/item/warmup", async () => {
 });
 
 app.get("/items-tracker/item/:id", async (c) => {
-  const id = c.req.param("id");
+  try {
+    const id = c.req.param("id");
 
-  const cachedItem = await client.kv.namespaces.values.get(
-    "1bbebb4e023a436c8dcb532e4715df2c",
-    `items-tracker-total-items-"${id}`,
-    { account_id: "eabd94460dcbcf675f80a7579c07956a" },
-  );
+    const cachedItem = await client.kv.namespaces.values.get(
+      "1bbebb4e023a436c8dcb532e4715df2c",
+      `items-tracker-total-items-"${id}`,
+      { account_id: "eabd94460dcbcf675f80a7579c07956a" },
+    );
 
-  const itemData = await cachedItem.json();
+    const itemData = await cachedItem.json();
 
-  if (itemData) {
-    return NextResponse.json(removeTypename(itemData), {
-      status: 200,
-    });
+    if (itemData) {
+      return NextResponse.json(removeTypename(itemData), {
+        status: 200,
+      });
+    }
+  } catch (error) {
+    console.log("get-tracker-item-id:", error);
   }
 
   return NextResponse.json(
