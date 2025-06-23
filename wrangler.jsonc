@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "main": ".open-next/worker.js",
-  "name": "tarkov-project-frontend",
+  "name": "next-test",
   "compatibility_date": "2024-12-30",
   "compatibility_flags": [
     // Enable Node.js API
