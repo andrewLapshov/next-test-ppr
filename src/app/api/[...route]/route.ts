@@ -98,16 +98,13 @@ app.get("/items-tracker/item/:id", async (c) => {
   try {
     const id = c.req.param("id");
 
-    const cachedItem = await client.kv.namespaces.values.get(
-      "1bbebb4e023a436c8dcb532e4715df2c",
+    const cachedItem = await getCloudflareContext().env.NEXT_INC_CACHE_KV.get(
       `items-tracker-total-items-"${id}`,
-      { account_id: "eabd94460dcbcf675f80a7579c07956a" },
     );
 
-    const itemData = await cachedItem.json();
-
-    if (itemData) {
-      return NextResponse.json(removeTypename(itemData), {
+    console.log(cachedItem);
+    if (cachedItem) {
+      return NextResponse.json(removeTypename(JSON.parse(cachedItem)), {
         status: 200,
       });
     }
