@@ -38,19 +38,9 @@ app.get("/items-tracker/purge", async (c) => {
 });
 
 app.get("/items-tracker/item/warmup", async () => {
-  let cachedFlag: Response | null = null;
-
-  try {
-    cachedFlag = await client.kv.namespaces.values.get(
-      "1bbebb4e023a436c8dcb532e4715df2c",
-      "items-tracker-all-items-set",
-      {
-        account_id: "eabd94460dcbcf675f80a7579c07956a",
-      },
-    );
-  } catch (e) {
-    console.log("key error", e);
-  }
+  const cachedFlag = await getCloudflareContext().env.NEXT_INC_CACHE_KV.get(
+    "items-tracker-all-items-set",
+  );
 
   if (!cachedFlag) {
     console.log("❌ MISS CACHE FOR ALL ITEMS...");
