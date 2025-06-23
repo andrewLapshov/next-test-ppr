@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 import Cloudflare from "cloudflare";
 
 const client = new Cloudflare({
-  apiToken: "IRtQEue87UaHsu9wtcK6jNkWfOHGd4HRPy5xbT9v",
+  apiToken: process.env.NEXT_PUBLIC_CF_API_TOKEN,
 });
 
 const app = new Hono<{ Bindings: CloudflareEnv }>().basePath("/api");
@@ -55,30 +55,40 @@ app.get("/items-tracker/item/warmup", async () => {
   if (!cachedFlag) {
     console.log("❌ MISS CACHE FOR ALL ITEMS...");
 
-    const rawData = await fetchAllItems(undefined, undefined, false);
+    try {
+      const rawData = await fetchAllItems(undefined, undefined, false);
 
-    const totalItemsKeyValue = rawData.data.items
-      .filter(Boolean)
-      .map((item) => ({
-        key: `items-tracker-total-items-"${item.id}`,
-        value: JSON.stringify(item),
-        expiration_ttl: 60 * 60 * 24,
-      }));
-
-    await client.kv.namespaces.bulkUpdate("1bbebb4e023a436c8dcb532e4715df2c", {
-      account_id: "eabd94460dcbcf675f80a7579c07956a",
-      body: totalItemsKeyValue,
-    });
-    await client.kv.namespaces.bulkUpdate("1bbebb4e023a436c8dcb532e4715df2c", {
-      account_id: "eabd94460dcbcf675f80a7579c07956a",
-      body: [
-        {
-          key: "items-tracker-all-items-set",
-          value: "SET",
+      const totalItemsKeyValue = rawData.data.items
+        .filter(Boolean)
+        .map((item) => ({
+          key: `items-tracker-total-items-"${item.id}`,
+          value: JSON.stringify(item),
           expiration_ttl: 60 * 60 * 24,
+        }));
+
+      await client.kv.namespaces.bulkUpdate(
+        "1bbebb4e023a436c8dcb532e4715df2c",
+        {
+          account_id: "eabd94460dcbcf675f80a7579c07956a",
+          body: totalItemsKeyValue,
         },
-      ],
-    });
+      );
+      await client.kv.namespaces.bulkUpdate(
+        "1bbebb4e023a436c8dcb532e4715df2c",
+        {
+          account_id: "eabd94460dcbcf675f80a7579c07956a",
+          body: [
+            {
+              key: "items-tracker-all-items-set",
+              value: "SET",
+              expiration_ttl: 60 * 60 * 24,
+            },
+          ],
+        },
+      );
+    } catch (e) {
+      console.log("set cache error:", e);
+    }
 
     console.log("💾 CACHE SET!");
   } else {
